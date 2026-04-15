@@ -39,6 +39,9 @@ Each member will create a simple personal branch, for example:
 
 - `overview-s`
 
+Pull requests targeting `main` should be reviewed by at least one other team member when possible. More importantly, they should be kept small, frequent, and closed as quickly as possible so that `main` always contains most of the current work.
+It is therefore acceptable to close them without extensive verification from the whole group, as the priority is to keep the shared content on `main` up to date.
+
 ## Members
 
 - Hemmati Fateme
