@@ -5,3 +5,6 @@ Read the project instructions and the Freeplane documentation to get familiar wi
 
 ## 14/04/2026
 Had a meeting with the team to discuss splitting the work.
+
+## 17/04/2026
+Had a meeting with Niccolo to discuss the first steps for the architectural part we'll work on together.
