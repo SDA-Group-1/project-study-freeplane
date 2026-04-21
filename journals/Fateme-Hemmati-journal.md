@@ -8,3 +8,7 @@ Had a meeting with the team to discuss splitting the work.
 
 ## 17/04/2026
 Had a meeting with Niccolo to discuss the first steps for the architectural part we'll work on together.
+
+## 21/04/2026
+-Did some research and code analysis to better understand the general architecture of the project, and created a basic C4 Model Level 1 and Level 2 to discuss with Niccolo.
+-Had a meeting with Niccolo, shared our ideas and notes, and agreed on a common version of the context and container diagrams.
