@@ -6,3 +6,6 @@
 
 ## 21/04/2026
 - I studied the Design Patterns documentation. This will allow me to perform a more effective code inspection in the coming days.
+
+## 22/04/2026
+- I started analyzing Freeplane source code, searching for keywords like 'Abstract' to pinpoint potential design patterns within the architecture.
