@@ -15,3 +15,6 @@ Had a meeting with Niccolo to discuss the first steps for the architectural part
 
 ## 29/04/2026
 Searched through the Freeplane source code and analyzed its structure to identify the main internal modules,  to find the Level 3 components of the C4 diagram.
+
+## 30/04/2026
+Had a long meeting with Niccolò, during which we discussed the components for Level 3 of the C4 model and agreed on a final version.
