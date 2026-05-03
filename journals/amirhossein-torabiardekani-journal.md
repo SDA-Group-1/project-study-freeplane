@@ -25,5 +25,17 @@ and knowledge dependencies between the Freeplane modules.
   freeplane (core), freeplane_api, freeplane_framework, 
   and several plugin modules such as freeplane_plugin_script 
   and freeplane_plugin_formula.
+
+
+  ## 03/05/2026
+
+- Cloned the Freeplane source code to the local machine.
+- Wrote a Python script to analyze import statements
+  across all Java source files.
+- Successfully identified inter-module dependencies:
+  - freeplane_api has no dependencies (base module)
+  - freeplane (core) depends only on freeplane_api
+  - All plugins depend on freeplane core
+  - freeplane_plugin_formula has the most dependencies
 - This initial exploration will serve as a starting point 
   for the dependency analysis.
