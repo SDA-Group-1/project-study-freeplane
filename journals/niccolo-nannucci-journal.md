@@ -17,3 +17,6 @@ Had a meeting with Fateme to integrate our works on the first two levels of C4 d
 
 ## 27/04/2026
 Worked on the codebase taking architectural notes for the third level of C4 diagram, as a base for the next meeting with Fateme.
+
+## 30/04/2026
+Had an online meeting with Fateme to discuss the level 3 components of the C4 model. We agreed on a common version and outlined the next steps for our collaboration and for the approval of the rest of the team.
