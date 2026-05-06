@@ -9,3 +9,6 @@
 
 ## 22/04/2026
 - I started analyzing Freeplane source code, searching for keywords like 'Abstract' to pinpoint potential design patterns within the architecture.
+
+## 06/05/2026
+- I focused my analysis on `NodeModel.java`, which serves as a core component of the Freeplane architecture. I identified the Composite Design Pattern within this class, which is used to manage the hierarchical structure of the mind map. In this implementation, NodeModel acts as both a 'Component' and a 'Composite', allowing individual nodes and entire branches to be treated uniformly. I studied how this pattern facilitates recursive operations, such as rendering or searching through the tree structure, ensuring that the system can handle complex nested maps efficiently.
