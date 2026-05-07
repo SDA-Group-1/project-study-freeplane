@@ -39,6 +39,6 @@ and knowledge dependencies between the Freeplane modules.
 
 
   ## 07/05/2026
-  We had a meeting with the team , Upadate each other about the project and set a deadline for finish the project. 
+I had a meeting with the team , Upadate each other about the project and set a deadline for finish the project. 
 
 
