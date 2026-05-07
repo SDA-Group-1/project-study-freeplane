@@ -1,13 +1,11 @@
 # Amirhossein Torabiardekani Personal Project Journal
 
 ## 13/04/2026
-
  Read the project requirements document (Project-SW_DA-2026.pdf) 
 and explored the Freeplane documentation and GitHub repository 
 to get familiar with the project structure and goals.
 
 ## 14/04/2026
-
 Attended a team meeting where we discussed different options 
 for splitting the work among the five members. Each member 
 was assigned a specific responsibility in the project.
@@ -16,7 +14,6 @@ Design Report, which involves analyzing code dependencies
 and knowledge dependencies between the Freeplane modules.
 
 ## 26/04/2026
-
 - Cloned the project repository to the local machine 
   using VS Code.
 - Started exploring the Freeplane GitHub repository 
@@ -28,7 +25,6 @@ and knowledge dependencies between the Freeplane modules.
 
 
   ## 03/05/2026
-
 - Cloned the Freeplane source code to the local machine.
 - Wrote a Python script to analyze import statements
   across all Java source files.
@@ -39,3 +35,10 @@ and knowledge dependencies between the Freeplane modules.
   - freeplane_plugin_formula has the most dependencies
 - This initial exploration will serve as a starting point 
   for the dependency analysis.
+
+
+
+  ## 07/05/2026
+  We had a meeting with the team , Upadate each other about the project and set a deadline for finish the project. 
+
+
