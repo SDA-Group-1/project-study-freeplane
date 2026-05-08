@@ -18,3 +18,6 @@ Searched through the Freeplane source code and analyzed its structure to identif
 
 ## 30/04/2026
 Had a long meeting with Niccolò, during which we discussed the components for Level 3 of the C4 model and agreed on a final version.
+
+## 7/05/2026
+Had a meeting with the team to review the progress made so far, update each other on completed tasks, and discuss the next steps. A deadline was also agreed upon for completing individual parts before finalizing the project.
