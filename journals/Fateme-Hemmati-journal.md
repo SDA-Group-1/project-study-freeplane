@@ -21,3 +21,6 @@ Had a long meeting with Niccolò, during which we discussed the components for L
 
 ## 7/05/2026
 Had a meeting with the team to review the progress made so far, update each other on completed tasks, and discuss the next steps. A deadline was also agreed upon for completing individual parts before finalizing the project.
+
+## 11/05/2026
+Worked on and analyzed the Freeplane source code to identify violations of the SOLID principles within the Level 3 architecture.
