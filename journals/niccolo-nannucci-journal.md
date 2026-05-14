@@ -20,3 +20,6 @@ Worked on the codebase taking architectural notes for the third level of C4 diag
 
 ## 30/04/2026
 Had an online meeting with Fateme to discuss the level 3 components of the C4 model. We agreed on a common version and outlined the next steps for our collaboration and for the approval of the rest of the team.
+
+## 07/05/2026
+Had a meeting with the team to show the work we did so far. We discussed the next steps for our parts and fixed a deadline for the whole project a few days before the official deadline in order to have a general review before the final commit.
