@@ -25,9 +25,13 @@ Had a meeting with the team to update each other on progress
 and agreed on a deadline for completing individual parts.
 
 ## 18/05/2026
-Wrote a second Python script to analyze knowledge dependencies 
-by examining the 1,000 most recent commits. Found that freeplane 
-core and freeplane_plugin_ai co-changed 44 times. Identified 
-two inconsistencies between code and knowledge dependencies. 
-Updated the design report with the full analysis, including 
-dependency diagrams and deeper explanations.
+
+Wrote two additional Python scripts to analyze knowledge 
+dependencies by examining the 1,000 most recent commits. 
+Found that freeplane core and freeplane_plugin_ai co-changed 
+44 times, making it the strongest knowledge dependency. 
+Identified two inconsistencies between code and knowledge 
+dependencies. Updated the design report with the full 
+analysis, including dependency diagrams, co-change tables, 
+and deeper explanations. Added all three scripts to the 
+extra-material folder.
