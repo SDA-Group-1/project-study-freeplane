@@ -48,3 +48,10 @@ Found that freeplane core and freeplane_plugin_ai co-changed
 dependencies. Updated the design report with co-change
 tables and deeper explanations. Added all three scripts
 to the extra-material folder.
+
+## 20/05/2026
+
+Identified two inconsistencies between code and knowledge
+dependencies. Updated the design report with co-change
+tables and deeper explanations. Added all three scripts
+to the extra-material folder.
