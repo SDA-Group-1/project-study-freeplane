@@ -24,3 +24,6 @@ Had a meeting with the team to review the progress made so far, update each othe
 
 ## 11/05/2026
 Worked on and analyzed the Freeplane source code to identify violations of the SOLID principles within the Level 3 architecture.
+
+## 21/05/2026
+Double-checked the Level 1 to Level 3 C4 diagrams in preparation for the review session with the professor. Also identified examples of SOLID principle violations in the source code.
