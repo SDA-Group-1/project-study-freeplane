@@ -27,3 +27,6 @@ Worked on and analyzed the Freeplane source code to identify violations of the S
 
 ## 21/05/2026
 Double-checked the Level 1 to Level 3 C4 diagrams in preparation for the review session with the professor. Also identified examples of SOLID principle violations in the source code.
+
+## 22/05/2026
+after the feedback meeting with professor, worked on correcting the issues of c4 diagram with niccolo.
