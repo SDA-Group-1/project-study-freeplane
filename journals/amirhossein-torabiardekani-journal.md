@@ -61,3 +61,7 @@ Identified two inconsistencies between code and knowledge
 dependencies. Updated the design report with co-change
 tables and deeper explanations. Added all three scripts
 to the extra-material folder.
+
+22/05/2026
+Trimmed the Dependencies section to stay within the word limit.
+Replaced the Mermaid code block with a PNG diagram file.
