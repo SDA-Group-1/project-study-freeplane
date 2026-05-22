@@ -61,3 +61,8 @@ to the extra-material folder.
 Added a Mermaid dependency diagram to the design report
 to visually represent the code dependencies between
 the main Freeplane modules.
+
+## 22/05/2026
+
+- Trimmed the Dependencies section to stay within the word limit.
+- Replaced the Mermaid code block with a PNG diagram file.
