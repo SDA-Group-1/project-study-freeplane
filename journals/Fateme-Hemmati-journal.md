@@ -30,3 +30,6 @@ Double-checked the Level 1 to Level 3 C4 diagrams in preparation for the review 
 
 ## 22/05/2026
 after the feedback meeting with professor, worked on correcting the issues of c4 diagram with niccolo.
+
+## 25/05/2026
+worked with Niccolo on c4 diagram level 1 and level2  issues, did more research on solid violations and started creating the report content.
