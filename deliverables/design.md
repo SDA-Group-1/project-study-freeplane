@@ -280,6 +280,15 @@ Because Freeplane is designed to run across diverse system configurations, it mu
 The absolute alternative to this factory design is Direct Instantiation (e.g., calling `new ImageIcon(...)` directly inside the node classes).
 - **Pros:** It eliminates abstraction boilerplate code and reduces the total number of system interfaces.
 - **Cons:** It hard-codes graphic frameworks into the data logic, violating the Dependency Inversion Principle and totally ruining structural portability across non-GUI platforms or automated testing pipelines.
+
 ## 3. Summary
 
-_(To be completed)_
+The architectural evaluation of Freeplane demonstrates a highly cohesive alignment between its macro-level module dependencies and its micro-level object-oriented design patterns. The repository's implementation details directly reinforce its global architectural goals of high extensibility, structural safety, and maintainability.
+
+The primary structural conclusions drawn from this analysis include:
+
+- **Enforced Decoupling through Design Patterns:** The clean, layered hierarchy identified in the module dependency analysis (moving from `freeplane_api` down to individual plugins) is actively sustained by the design patterns embedded in the code. The *Observer* pattern prevents the `MapModel` from depending on heavy Swing UI components, which directly explains why the core `freeplane` module maintains minimal coupling. Similarly, the *Abstract Factory* pattern encapsulates environmental constraints, allowing the system to run in headless environments without breaking core domain logic.
+- **Pragmatism Over Architectural Purism:** Freeplane’s codebase frequently prioritizes runtime performance and user experience over rigid design patterns text-book definitions. This trade-off is evident in the *Composite* implementation, which merges roles within a single `NodeModel` class to eliminate object allocation overhead during fluid map editing, and in the *Singleton* pattern inside `Controller`, which chooses a globally accessible registry over complex dependency injection containers to avoid over-engineering.
+- **Transactional and Scalable Infrastructure:** The use of the *Command* pattern rather than Memento minimizes the JVM memory footprint while scaling up undo/redo history capabilities for large maps. This explicit transactional framework ensures that high-frequency edits in the highly active core module (787 commits) do not destabilize the stable contract layer of the application.
+
+In conclusion, Freeplane presents a mature, evolution-ready architecture. While the high change frequency of the core module and the ongoing integration of recent features like `freeplane_plugin_ai` introduce natural maintenance focus points, the rigid preservation of the `freeplane_api` contract layer guarantees that the system remains modular, safe from circular dependencies, and highly adaptable for future extensions.
