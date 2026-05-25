@@ -23,3 +23,12 @@ Had an online meeting with Fateme to discuss the level 3 components of the C4 mo
 
 ## 07/05/2026
 Had a meeting with the team to show the work we did so far. We discussed the next steps for our parts and fixed a deadline for the whole project a few days before the official deadline in order to have a general review before the final commit.
+
+## 15/05/2026
+Worked on SOLID violations in the Freeplane project and searched for cohesion in Level 3 for the next meeting with Fateme.
+
+## 21/05/2026
+Reviewed the C4 diagrams in preparation for the check with the professor.
+
+## 22/05/2026
+Had a feedback session with the professor and then a meeting with Fateme to discuss the key point of that, reviewed the diagrams and then did the part we already prepared at home.
