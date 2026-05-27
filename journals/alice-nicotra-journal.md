@@ -24,3 +24,11 @@
     - *Singleton Pattern*: Discovered a thread-safe registry variation in `Controller.java` (features.mode) providing single-point global access to sub-systems.
     - *Abstract Factory Pattern*: Spotted in `IconFactory.java`, managing environment-dependent components to allow headless batch execution without UI rendering crashes.
 - Drafted the concise report sections for all five extracted patterns (Composite, Observer, Command, Singleton, Abstract Factory) to finalize formatting and word count requirements.
+
+## 22/05/2026
+- Reviewed the text of the Design Patterns section and inserted all the links to the source code.
+- Pulled the 'design' branch to integrate the Dependencies section with the Design Patterns section.
+- Read the Dependencies section and added the summary of the design report. Then, committed the full text (pending a final review once the word count script is available).
+
+## 25/05/2026
+- Started figuring out which diagrams/images would best visualize the implemented design pattern.
