@@ -33,3 +33,6 @@ after the feedback meeting with professor, worked on correcting the issues of c4
 
 ## 25/05/2026
 worked with Niccolo on c4 diagram level 1 and level2  issues, did more research on solid violations and started creating the report content.
+
+## 26/05/2026
+had a 5 hour meeting with niccolo, corrected and finilized containers diagram, comopnents diagram of osgi container and created report.
