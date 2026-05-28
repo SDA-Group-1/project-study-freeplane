@@ -41,3 +41,7 @@ had a 5 hour meeting with niccolo, corrected and finilized containers diagram, c
 
 ## 26/05/2026
 Had another 5-hour meeting with Niccolò. Corrected and finalized the container diagram and the component diagram of the Core Mind Map container, and created the report. We discussed the violations and checked whether they matched the component diagrams we created. Also reviewed the code further to ensure all relationships were relevant, and fixed their naming and technologies.
+
+## 27/05/2026
+Did the final corrections for all three diagram levels and completed the architecture section of the report document with Niccolò. Read the design section done by Amirhossein and Alice to better understand that part, identify possible conflicts, and make sure everything is coherent between the design and architecture sections.
+
