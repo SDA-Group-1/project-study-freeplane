@@ -1,5 +1,7 @@
 # Fateme Hemmati Personal Project Journal
 
+My part of the project is working on the system architecture together with Niccolò.
+
 ## 13/04/2026
 Read the project instructions and the Freeplane documentation to get familiar with the project. Did some research on the best ways of splitting the work to make it fair and make sure all students participate equally, in a way that we all learn enough to meet the course project goals.
 
@@ -36,3 +38,6 @@ worked with Niccolo on c4 diagram level 1 and level2  issues, did more research 
 
 ## 26/05/2026
 had a 5 hour meeting with niccolo, corrected and finilized containers diagram, comopnents diagram of osgi container and created report.
+
+## 26/05/2026
+Had another 5-hour meeting with Niccolò. Corrected and finalized the container diagram and the component diagram of the Core Mind Map container, and created the report. We discussed the violations and checked whether they matched the component diagrams we created. Also reviewed the code further to ensure all relationships were relevant, and fixed their naming and technologies.
