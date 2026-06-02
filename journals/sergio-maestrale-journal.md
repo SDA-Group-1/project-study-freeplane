@@ -9,3 +9,11 @@ We did a brief discussion where we decidecd how divide oursalves for the project
 ## 15/04/2026
 
 Took a bit of time to re-read the documentation, and setup a Readme.md to formalize our decision on the organization of the project.
+
+## 30/05/2026
+
+finising to agglomerate the data for the project, like line of code or number of package and modules
+
+## 02/06/2026
+
+finishing the writing on overview.md
