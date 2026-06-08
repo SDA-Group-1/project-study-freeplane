@@ -32,3 +32,9 @@
 
 ## 25/05/2026
 - Started figuring out which diagrams/images would best visualize the implemented design pattern.
+
+## 08/06/2026
+- Finalized Design Report Section: Integrated the custom-generated UML design pattern diagrams into the design.md file, ensuring precise alignment between the architectural theory and the actual Freeplane implementation.
+- Conducted a comprehensive proofreading of the entire Design section, cross-referencing it with the Overview and Architecture chapters to ensure consistent terminology and logical flow across the project documentation.
+- Refined the pattern analysis (specifically updating the Singleton and Composite sections) to include critical architectural trade-offs and detailed dependency observations, ensuring that identified violations are accurately reported.
+- Performed a final word count check using the provided utility script to confirm that the entire document remains within the 2500-word constraint, ensuring all technical requirements for the report submission are met.
