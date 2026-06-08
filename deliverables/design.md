@@ -43,6 +43,7 @@ All scripts are available in the `extra-material` folder.
 | freeplane_plugin_svg       | freeplane                          |
 | freeplane_plugin_bugreport | freeplane                          |
 | freeplane_plugin_ai        | freeplane                          |
+| freeplane_plugin_jsyntaxpan| freeplane                          |
 
 ### Dependency Diagram
 
@@ -61,6 +62,7 @@ All scripts are available in the `extra-material` folder.
 - **freeplane_plugin_formula** is the most coupled plugin,
   depending on both core and `freeplane_plugin_script`, justified
   by its need to execute Groovy scripts during formula evaluation.
+- **freeplane_plugin_jsyntaxpane** acts as a second implicit aggregation point. Despite having no dependencies on other plugins, it is a shared dependency for four distinct plugins (`script`, `formula`, `markdown`, `latex`), making it a critical support component.
 - The overall structure follows a clean layered architecture with
   no circular dependencies.
 
@@ -115,9 +117,9 @@ mature components.
 #### Are these dependencies consistent and logical?
 
 Yes. No circular dependencies were found. Plugins do not depend
-on each other, with the single justified exception of
+on each other, with the notable exception of
 `freeplane_plugin_formula` depending on
-`freeplane_plugin_script`. All modules depend on the API layer
+`freeplane_plugin_script`, and four plugins (`script`, `formula`, `markdown`, `latex`) sharing a dependecy on `freeplane_plugin_jsyntaxpane`. All modules depend on the API layer
 rather than on internal implementations, and the layered
 structure (api → core → framework → plugins) is consistently
 respected across the entire codebase.
@@ -185,13 +187,7 @@ The commit history was analyzed using a Python script examining
 
 ## 2. Patterns
 
-Freeplane incorporates a highly structured architectural framework designed to handle the complex structural and interactive requirements of mind-mapping software. At a macroscopic level, the codebase enforces a strict separation of concerns by adopting the Model-View-Controller (MVC) architectural pattern, which partitions the system into three interconnected layers:
-
-- **Model:** Encapsulates the structural topology of the mind map as a pure data tree. Domain classes track node text, attributes, and graph hierarchies without maintaining any awareness of presentation or visual coordinates.
-- **View:** Built upon the Java Swing framework, this layer isolates the intricate spatial and layout calculations required for map visualization, translating abstract graph topology into concrete graphical coordinates based on zoom levels and folding states.
-- **Controller:** Manages user input loops, high-frequency command mapping, and drag-and-drop mechanics. It is heavily optimized for a keyboard-first interaction model, ensuring that state updates propagate safely without leaking view dependencies.
-
-To complement this foundation, Freeplane utilizes an event-driven subsystem based on asynchronous and synchronous event propagation. When a data property is updated within a node, the Model acts as an event publisher, broadcasting structural delta packages across a centralized event bus. This architectural layout allows presentation views, search indexers, and peripheral plugins to synchronize their internal state simultaneously and independently, eliminating structural fragility and ensuring long-term system maintainability.
+Freeplane enforces separation of concerns through the MVC architectural pattern: the **Model** manages the mind map data tree, the **View** handles Java Swing rendering, and the **Controller** manages user input and command dispatching. Design patterns are applied at the micro level to reinforce this structure.
 
 ### 2.1. Structural Patterns: Composite
 
@@ -202,13 +198,17 @@ In any mind-mapping tool, nodes exist in fluid states, acting either as simple t
 
 **Roles Mapping in Code:**
 - **Component:** The [NodeModel](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L54) class serves as the unified interface, defining common lifecycle methods like [attach()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L607) and [detach()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L618) for all elements in the map.
-- **Composite:** [NodeModel](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L54) acts as a composite when it contains other nodes, managing them internally via a `private List<NodeModel> children` collection. Structural integrity and bidirectional trace are maintained through the [insert()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L659) and [remove()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L508) methods.
+- **Composite:** [NodeModel](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L54) acts as a composite when it contains other nodes, managing them internally via a `private List<NodeModel> children` collection. Structural integrity and bidirectional trace are maintained through the [insert()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L413) and [remove()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L508) methods.
 - **Leaf:** [NodeModel](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L54) dynamically assumes the leaf role when its children list is empty. This state is evaluated at runtime by invoking the [isLeaf()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/NodeModel.java#L452) method.
+
+![Freeplane Composite Pattern](Composite_pattern.png)
 
 **Alternative & Trade-offs:**
 An alternative design would involve strictly segregating the elements into explicit `LeafNode` and `BranchNode` classes implementing a unified interface.
 - **Pros:** It provides stronger compile-time type safety by preventing structural insertions on terminal leaves.
-- **Cons:** In fluid mind maps, leaves constantly transition into branches as users append sub-ideas. Separate classes would compel the system to constantly destroy leaf objects, instantiate branch objects, copy extensive text payloads, and re-index references. This causes severe runtime overhead and breaks command history tracking.
+- **Cons:** In fluid mind maps, leaves constantly transition into branches as users append sub-ideas. Separate classes would compel the system to constantly destroy leaf objects, instantiate branch objects, copy extensive text payloads, and re-index references. This causes severe runtime overhead and breaks command history tracking. 
+
+**Architectural Note**: `NodeModel` accumulates data, structure, and lifecycle management responsibilities within one concrete class. With an abstractness ratio near 15% and over 670 direct imports, it represents a stable but difficult-to-evolve gravitational center, consistent with the SAP and CCP violations identified in the architectural analysis.
 
 ### 2.2. Behavioral Patterns: Observer
 
@@ -221,6 +221,8 @@ The primary challenge is updating presentation layers without hard-coding specif
 - **Subject:** [org.freeplane.features.map.MapModel](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/MapModel.java) keeps a registry of subscribers and broadcasts change notifications through routines like [fireMapChangeEvent()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/MapModel.java#L113).
 - **Observer:** [org.freeplane.features.map.INodeChangeListener](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/INodeChangeListener.java) and [IMapChangeListener](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/IMapChangeListener.java#L25) define the common interface and prescribed callback structures such as [nodeChanged()](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/map/INodeChangeListener.java#L23).
 - **Concrete Observer:** Graphical modules like [org.freeplane.view.swing.map.MapView](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/view/swing/map/MapView.java) instantiate these listeners and catch the broadcasted events to trigger a visual `repaint()` loop.
+
+![Freeplane Observer Pattern](Observer_pattern.png)
 
 **Alternative & Trade-offs:**
 The standard alternative is Tight Coupling, where the core domain model retains direct references to visual canvas panels and directly invokes rendering updates.
@@ -242,6 +244,8 @@ Directly modifying a mind map's state via UI controllers strips the system of tr
 - **Invoker:** [org.freeplane.core.undo.UndoHandler](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/core/undo/UndoHandler.java) acts as the history manager, holding an ordered `LinkedList` of executed actions and tracking the timeline cursor via an iterator.
 - **Macro Command optimization:** The [CompoundActor](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/core/undo/CompoundActor.java) class holds a nested list of independent commands, allowing high-density batch modifications to execute or reverse as a single unified action.
 
+![Freeplane Command Pattern](Command_pattern.png)
+
 **Alternative & Trade-offs:**
 The natural design alternative for capturing historical changes is the Memento pattern.
 - **Pros:** Low implementation complexity, as it simply saves complete document state snapshots.
@@ -262,7 +266,9 @@ Complex desktop applications require global references to orchestrate applicatio
 **Alternative & Trade-offs:**
 An alternative approach is using a Dependency Injection (DI) framework such as Spring or Google Guice.
 - **Pros:** Highly improves testability by allowing mock controllers to be injected into independent modules, making class dependencies completely explicit.
-- **Cons:** Introducing a DI engine into a legacy desktop application requires massive architectural refactoring. It adds significant runtime initialization overhead for an environment where a solitary global context is already naturally mandated by the single-user nature of desktop execution.
+- **Cons:** Introducing a DI engine into a legacy desktop application requires massive architectural refactoring, adding significant runtime initialization overhead for an environment where a single global context is naturally mandated by the single-user nature of desktop execution.
+
+**Architectural Note**: The pervasive use of `getCurrentontroller()` violates the Dependency Inversion Principle and hinders unit testing —  any component depending on the Controller requires booting the entire initialization chain. It is a conscious trade-off, not an ideal solution.
 
 ### 2.5. Creational Patterns: Abstract Factory
 
@@ -276,6 +282,8 @@ Because Freeplane is designed to run across diverse system configurations, it mu
 - **Concrete Factories:** [`GraphicIconFactory`](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/icon/factory/GraphicIconFactory.java) handles standard GUI rendering, while [`HeadlessIconFactory`](https://github.com/freeplane/freeplane/blob/1.13.x/freeplane/src/main/java/org/freeplane/features/icon/factory/HeadlessIconFactory.java) handles headless command-line execution contexts.
 - **Product:** Abstract icon wrappers (e.g., `UIIcon`) returned by the factory methods. During headless terminal execution, the factory returns lightweight, invisible dummy frames that require zero hardware support, preventing application crashes.
 
+![Freeplane Abstract factory Pattern](Abstract_factory_pattern.png)
+
 **Alternative & Trade-offs:**
 The absolute alternative to this factory design is Direct Instantiation (e.g., calling `new ImageIcon(...)` directly inside the node classes).
 - **Pros:** It eliminates abstraction boilerplate code and reduces the total number of system interfaces.
@@ -288,7 +296,7 @@ The architectural evaluation of Freeplane demonstrates a highly cohesive alignme
 The primary structural conclusions drawn from this analysis include:
 
 - **Enforced Decoupling through Design Patterns:** The clean, layered hierarchy identified in the module dependency analysis (moving from `freeplane_api` down to individual plugins) is actively sustained by the design patterns embedded in the code. The *Observer* pattern prevents the `MapModel` from depending on heavy Swing UI components, which directly explains why the core `freeplane` module maintains minimal coupling. Similarly, the *Abstract Factory* pattern encapsulates environmental constraints, allowing the system to run in headless environments without breaking core domain logic.
-- **Pragmatism Over Architectural Purism:** Freeplane’s codebase frequently prioritizes runtime performance and user experience over rigid design patterns text-book definitions. This trade-off is evident in the *Composite* implementation, which merges roles within a single `NodeModel` class to eliminate object allocation overhead during fluid map editing, and in the *Singleton* pattern inside `Controller`, which chooses a globally accessible registry over complex dependency injection containers to avoid over-engineering.
+- **Pragmatism Over Architectural Purism:** Freeplane’s codebase frequently prioritizes runtime performance and user experience over rigid design patterns text-book definitions. This trade-off is evident in the *Composite* implementation, which merges roles within a single `NodeModel` class to eliminate object allocation overhead during fluid map editing, and in the *Singleton* pattern inside `Controller`, which chooses a globally accessible registry over dependency injection, accepting the testability costs this entails.
 - **Transactional and Scalable Infrastructure:** The use of the *Command* pattern rather than Memento minimizes the JVM memory footprint while scaling up undo/redo history capabilities for large maps. This explicit transactional framework ensures that high-frequency edits in the highly active core module (787 commits) do not destabilize the stable contract layer of the application.
 
 In conclusion, Freeplane presents a mature, evolution-ready architecture. While the high change frequency of the core module and the ongoing integration of recent features like `freeplane_plugin_ai` introduce natural maintenance focus points, the rigid preservation of the `freeplane_api` contract layer guarantees that the system remains modular, safe from circular dependencies, and highly adaptable for future extensions.
