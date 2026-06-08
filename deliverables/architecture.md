@@ -13,35 +13,7 @@ This ensures high modularity, hot-reloading, and optimal memory efficiency.
 All the diagrams are made using VS Code with PlantUML extension.
 
 ## 2. Context Level
-```plantuml
-@startuml Freeplane_Context_Diagram
-
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
-
-title Freeplane - Level 1 - System Context Diagram
-
-Person(user, "User", "Creates and edits mind maps and diagrams.")
-System(freeplane, "Freeplane", "Desktop Java mind mapping application.")
-
-System_Ext(localFileSystem, "Local Filesystem", "Stores .mm mind map files, configuration files, preferences, and resources.")
-System_Ext(webBrowser, "Default Web Browser", "Opens external URLs and resources embedded in maps.")
-System_Ext(aiProviders, "AI Providers / LLMs", "External AI services such as OpenAI or local Ollama, Calls AI providers when AI plugin is enabled.")
-System_Ext(addonRepository, "Add-on Repository", "Community plugin infrastructure where add-ons can be published and downloaded.")
-System_Ext(hostJavaApp, "Host Java pplication", "External Java application that can embed Freeplane in headless mode.")
-
-Rel(user, freeplane, "Uses to create and edit mind maps")
-Rel(freeplane, localFileSystem, "Reads/writes .mm files, config, preferences, resources")
-Rel(freeplane, webBrowser, "Opens external links/resources")
-Rel(freeplane, aiProviders, "Calls AI APIs when AI plugin is active")
-Rel(freeplane, addonRepository, "Downloads/loads plugins")
-Rel(hostJavaApp, freeplane, "uses freeplane API in headless mode")
-
-SHOW_LEGEND()
-
-caption Figure 2.1: Level 1 (Context Level) Diagram
-
-@enduml
-```
+![Figure 2.1](fig2-1.svg)
 
 In figure 2.1 you can see the **Context Level** diagram for Freeplane. Here there are all the actors and external systems that interact with the main system we focus on.
 
@@ -62,50 +34,7 @@ In some cases, whenever the "AI" Core Plugin is enabled (see chapter 3 and 4 for
 Speaking of plugins, all the Core Plugins organization belongs to the main app, but we'll talk about later in chapter 4 when we'll explore the Components Level. For now, we just notice that if some additional features are needed, the app can integrate them by downloading and loading "Community Plugins" that are accessible online through the <strong><span style="color:#999999">Add-on Repository</span></strong>.
 
 ## 3. Container Level
-```plantuml
-@startuml Freeplane_Container_Diagram
-
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
-
-skinparam nodesep 80
-skinparam ranksep 100
-
-title Freeplane - Level 2 - Container Diagram
-
-Person(user, "Freeplane User", "Creates, edits, organizes, and navigates mind maps using the desktop application.")
-
-System_Ext(defaultBrowser, "Default Web Browser", "Opens external URLs and resources linked from maps.")
-System_Ext(aiProviders, "AI Providers / LLMs", "OpenAI, OpenRouter, Gemini, Ollama, or similar AI services.")
-System_Ext(addOnRepository, "Add-on Repository", "External place for downloading community add-ons.")
-System_Ext(hostJavaApp, "Host Java Application", "External Java application using Freeplane in headless mode.")
-System_Ext(localStorage, "Local Filesystem", "Stores .mm mind map files, configuration files, preferences, add-ons, and resources.")
-
-System_Boundary(freeplaneBoundary, "Freeplane Software") {
-
-    Container(launcherRuntime, "Launcher + OSGi Runtime","", "JBootstraps Freeplane and manages OSGi bundles and extensions.")
-
-    Container(coreMindMapApp, "Core Mind Map App","", "Manages mind maps, add-ons, and AI features. Runs as GUI or headless.")
-}
-
-' User interacts only with Core - GUI mode only
-Rel(user, coreMindMapApp, "Uses desktop UI to create, edit, and navigate mind maps", "Java Swing / GUI mode")
-
-' Host App: two relationships - startup and runtime
-Rel(hostJavaApp, launcherRuntime, "Starts Freeplane in headless mode", "Java API / JVM process")
-Rel_D(launcherRuntime, coreMindMapApp, "Initializes and activates core bundle", "OSGi bundle activation")
-Rel_R(hostJavaApp, coreMindMapApp, "Invokes map operations via headless API", "Java API")
-
-' Core external relationships
-Rel(coreMindMapApp, localStorage, "Reads and writes mind maps, preferences and resources", "Java File I/O")
-Rel(coreMindMapApp, defaultBrowser, "Opens external URLs from map nodes", "OS URI handling")
-Rel(coreMindMapApp, addOnRepository, "Downloads and installs community add-ons", "HTTPS")
-Rel(coreMindMapApp, aiProviders, "Sends prompts and receives AI responses", "HTTPS / JSON API ")
-
-SHOW_LEGEND()
-
-caption Figura 3.1: Level 2 (Container Level) Diagram
-@enduml
-```
+![Figure 3.1](fig3-1.svg)
 
 The figure 3.1 shows the **Container Level** for Freeplane's architecture.
 
@@ -124,174 +53,15 @@ This structure has a strong relationship with the **Clean Architecture blueprint
 _This chapter will focus on the components for each of the two containers shown in the previous chapter. Then, we'll do a detailed analysis for the SOLID violations and the quality of the architecture._
 
 ### 4.1 Launcher + OSGi
-```plantuml
-@startuml Freeplane_Launcher_OSGi_Component_Diagram
+![Figure 4.1](fig4-1.svg)
 
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
-
-title Freeplane - Level 3 - Launcher + OSGi Runtime Components
-
-System_Ext(hostJavaApp, "Host Java Application", "External Java application using Freeplane in headless mode.")
-
-Container_Boundary(launcherRuntime, "Launcher + OSGi Runtime [Java + Knopflerfish OSGi]") {
-
-    Component(launcherEntry, "Launcher / Entry Point", "Java", "Entry point that starts the Freeplane process.")
-
-    Component(runtimeBootstrap, "Runtime Environment Configurator", "Java", "Loads system properties, sets Freeplane directories, command args, security policy, and OSGi framework settings.")
-
-    Component(bundle, "OSGi Bundle Runtime", "Java / OSGi", "Loads and activates OSGi bundles and starts the org.freeplane.core bundle.")
-
-    Component(serviceRegistry, "Service Registry", "OSGi", "Provides dynamic service registration, lookup, and communication between bundles.")
-}
-
-Container(coreMindMapApp, "Core Mind Map App", "Java / OSGi", "Manages mind maps, add-ons, and AI features. Runs as GUI or headless.")
-
-' External relationship
-Rel(hostJavaApp, launcherEntry, "Starts Freeplane process", "Java API / JVM process")
-
-' Internal startup flow
-Rel_D(launcherEntry, runtimeBootstrap, "Starts", "In-process Java call")
-Rel_D(runtimeBootstrap, bundle, "Initializes", "In-process Java call")
-
-' Bundle/runtime behavior
-Rel_R(bundle, coreMindMapApp, "Starts core bundle", "OSGi bundle activation")
-Rel(bundle, serviceRegistry, "Provides service registration and lookup", "OSGi Service API")
-
-' Core bundle service usage
-Rel(coreMindMapApp, serviceRegistry, "Registers and looks up OSGi services", "OSGi Service API")
-
-SHOW_LEGEND()
-
-caption Figure 4.1: Level 3 (Component Diagram) for "Launcher + OSGi" Container
-
-@enduml
-```
 The figure 4.1 shows the **component diagram for the Launcher + OSGi container**.
 
 As you can see, the consistency with the previous level it's maintained looking at the inputs and outputs outside the container's boundaries: the <strong><span style="color:#999999">Host Java Application</span></strong> communicates through APIs with the <strong><span style="color:#85BBF0">Launcher / Entry Point</span></strong> which starts the entire Freeplane process calling the <strong><span style="color:#85BBF0">Runtime Environment Configurator</span></strong>. Then, the <strong><span style="color:#85BBF0">OSGi Bundle Runtime</span></strong> it's initialized and it provides service registration in the <strong><span style="color:#85BBF0">Service Registry</span></strong> in order to allow the <strong><span style="color:#438DD5">Core Mind Map App</span></strong> to discover them via OSGi Service APIs.
 
 ### 4.2 Core Mind Map App
-```plantuml
-@startuml Freeplane_Core_App_Component_Diagram
+![Figure 4.2](fig4-2.svg)
 
-skinparam nodesep 80
-skinparam ranksep 100
-
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
-
-title Freeplane - Level 3 - Core Mind Map App Components
-
-Container(osgiRuntime, "Launcher + OSGi Runtime", "Java / Knopflerfish OSGi", "Starts the org.freeplane.core bundle and provides OSGi bundle/service APIs.")
-
-System_Ext(defaultBrowser, "Default Web Browser", "Opens external links from maps.")
-System_Ext(aiProviders, "AI Providers / LLMs", "OpenAI, OpenRouter, Gemini, Ollama, or similar AI services.")
-System_Ext(addonRepo, "Add-on Repository", "External source for downloading community add-ons.")
-ContainerDb_Ext(localFs, "Local Filesystem", "File I/O", "Stores .mm maps, preferences, resources, and installed add-ons.")
-
-Container_Boundary(coreApp, "Core Mind Map App [Java / OSGi Bundle]") {
-
-    Component(coreActivator, "Core Bundle Activator", "Java / OSGi", "Starts Freeplane core initialization after org.freeplane.core is activated.")
-
-    Component(appStarter, "Application Starter", "Java", "Creates GUI or headless runtime, initializes app controller, view controller, resources, and startup lifecycle.")
-
-    Component(resourceController, "Resource Handling", "Java", "Manages icons, resources, configuration, translations, and preferences.")
-
-    Component(appController, "Application Controller", "Java", "Coordinates global application state, lifecycle, actions, modes, and loaded maps.")
-
-    Component(modeController, "Mode Controller", "Java", "Provides mode-specific runtime context for mind map editing: holds registered actions, extensions, undo/redo execution, option panel, and user input listener factory.")
-
-    Component(mapController, "Map Controller", "Java", "Coordinates map lifecycle, map operations, selection, node actions, and map change events.")
-
-    Component(mapIO, "Map I/O", "Java", "Loads and saves .mm maps and handles map serialization/deserialization.")
-
-    Component(mapModel, "Map Domain Model", "Java Objects", "Represents mind maps, nodes, links, attributes, notes, styles, and map data.")
-
-    Component(mapViews, "Map Views", "Java Swing", "Displays mind maps visually in the desktop UI.")
-
-    Component(uiSubsystem, "UI Subsystem", "Java Swing", "Builds main frame, menus, toolbars, popups, dialogs, map views, and browser-link actions.")
-
-    Component(menuOptions, "Menu / Option Builders", "Java / XML", "Builds menus and preferences UI from XML definitions and registered actions.")
-
-    Component(undoRedo, "Undo / Redo Manager", "Java", "Tracks undoable map edits and redo behavior.")
-
-    Component(addOnsController, "Add-on Manager", "Java", "Installs, registers, activates/deactivates, and persists add-ons.")
-
-    Component(pluginLoader, "Plugin Discovery / Bundle Startup", "Java / OSGi Bundle API", "Scans installation and user plugin directories, installs and starts plugin bundles.")
-
-    Component(extensionInstaller, "Extension Installer", "Java / OSGi Service API", "Looks up plugin extension providers and installs them into controllers and modes.")
-
-    Boundary(coreFeatureGroup, "Built-in Core Feature Modules") {
-        Component(presentationModule, "Presentation Module", "Java package", "Provides presentation/slideshow functionality.")
-        Component(encryptionModule, "Encryption Module", "Java package", "Provides encrypted map/node support.")
-        Component(importExportModule, "Import / Export Module", "Java package", "Imports external formats and exports maps.")
-        Component(helpModule, "Help Module", "Java package", "Provides help, documentation, and about actions.")
-        Component(filterController, "Filtering / Search Controller", "Java", "Filters visible nodes, manages filter conditions, hidden nodes, and filter toolbar behavior.")
-        
-    }
-
-    Boundary(pluginGroup, "OSGi Plugin Bundles") {
-        Component(scriptPlugin, "Script Plugin", "OSGi Bundle", "Provides Groovy scripting and add-on scripting support.")
-        Component(formulaPlugin, "Formula Plugin", "OSGi Bundle", "Supports formulas inside maps.")
-        Component(jsyntaxPlugin, "JSyntaxPane Plugin", "OSGi Bundle", "Provides syntax highlighting/editor support.")
-        Component(latexPlugin, "LaTeX Plugin", "OSGi Bundle", "Supports LaTeX rendering and editing.")
-        Component(markdownPlugin, "Markdown Plugin", "OSGi Bundle", "Supports Markdown rendering and editing.")
-        Component(aiPlugin, "AI Plugin", "OSGi Bundle", "Provides AI chat, prompts, AI map editing tools, and MCP server support.")
-    }
-}
-
-Rel(osgiRuntime, coreActivator, "Starts core bundle", "OSGi bundle activation")
-
-Rel_D(coreActivator, appStarter, "Creates GUI/headless starter and starts app startup", "Java call")
-Rel_D(appStarter, resourceController, "Initializes resources and preferences", "Java call")
-Rel_D(appStarter, appController, "Creates global controller", "	Java object creation")
-Rel_D(appStarter, modeController, "Creates mode controllers through mode factories", "Java call")
-Rel_D(appStarter, helpModule, "Installs help actions/controller during startup", "Runtime Java call")
-
-Rel_D(appStarter, filterController, "Installs filter controller during startup", "Runtime Java call")
-
-Rel_D(modeController, filterController, "Uses filter state when navigating and editing maps", "Runtime Java call")
-
-Rel_D(encryptionModule, modeController, "Registers encryption actions and extensions", "Java call")
-Rel_D(presentationModule, modeController, "Registers presentation controller/actions", "Java call")
-Rel_D(importExportModule, modeController, "Registers export controller and import actions", "Java call")
-Rel_D(modeController, mapController, "Holds map controller and exposes it to features", "Java call")
-Rel_D(modeController, uiSubsystem, "Holds user input listener factory", "Java Swing")
-
-Rel_D(mapController, mapIO, "Coordinates map open/load/save lifecycle", "Java call")
-Rel_D(mapController, mapModel, "Creates and updates maps/nodes", "Java object model")
-Rel_D(mapController, undoRedo, "Records undoable map edits", "Java call")
-Rel_D(mapViews, mapController, "Sends user map actions", "Java Swing events")
-Rel_D(mapController, mapViews, "Publishes map/model changes", "Java listener events")
-
-Rel_D(uiSubsystem, menuOptions, "Builds menus/preferences", "Java / XML")
-Rel_D(uiSubsystem, mapViews, "Renders map views", "Java Swing")
-Rel(uiSubsystem, defaultBrowser, "Opens external URLs", "OS URI / Desktop API")
-
-Rel(resourceController, localFs, "Reads/writes preferences, translations, and resources", "Java File I/O")
-Rel(mapIO, localFs, "Reads/writes .mm mind map files", "Java File I/O, XML")
-Rel(addOnsController, localFs, "Stores installed add-ons and metadata", "Java File I/O, XML")
-Rel(addOnsController, addonRepo, "Installs add-ons from URL", "HTTPS / URL")
-
-Rel_D(coreActivator, pluginLoader, "Loads installed/user plugin bundles", "OSGi API")
-Rel(pluginLoader, pluginGroup, "Discovers, installs, and starts plugin bundles", "OSGi Bundle API")
-
-Rel(extensionInstaller, appController, "Installs controller extensions", "OSGi service lookup + Java callback")
-Rel(extensionInstaller, modeController, "Installs mode extensions", "OSGi service lookup + Java callback")
-
-Rel(formulaPlugin, scriptPlugin, "Uses scripting support", "OSGi package import")
-Rel(scriptPlugin, jsyntaxPlugin, "Uses syntax editor support", "OSGi package import")
-Rel(formulaPlugin, jsyntaxPlugin, "Uses syntax editor support", "OSGi package import")
-Rel(markdownPlugin, jsyntaxPlugin, "Depends on JSyntaxPane support", "OSGi package import")
-Rel(latexPlugin, jsyntaxPlugin, "Uses syntax editor support", "OSGi package import")
-Rel(aiPlugin, markdownPlugin, "Uses Markdown rendering support", "OSGi import, Java call")
-Rel(aiPlugin, aiProviders, "Sends prompts and receives AI responses", "HTTPS / JSON API")
-
-SHOW_LEGEND()
-
-caption Figure 4.2: Level 3 (Component Diagram) for "Core Mind Map App" Container
-
-@enduml
-```
 The figure 4.2 shows the **component diagram for the Core Mind Map App**.
 
 The <strong><span style="color:#438DD5">Launcher + OSGi Runtime</span></strong> starts using the OSGi framework the <strong><span style="color:#85BBF0">Core Bundle Activator</span></strong>, which is responsible of the initialization of the main parts of the system: the <strong><span style="color:#85BBF0">Application Starter</span></strong>, the <strong><span style="color:#85BBF0">Plugin Discovery / Bundle Startup</span></strong>.
