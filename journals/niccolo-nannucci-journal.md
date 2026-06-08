@@ -32,3 +32,21 @@ Reviewed the C4 diagrams in preparation for the check with the professor.
 
 ## 22/05/2026
 Had a feedback session with the professor and then a meeting with Fateme to discuss the key point of that, reviewed the diagrams and then did the part we already prepared at home.
+
+## 25/05/2026
+Worked together with Fateme to correct diagrams for L1 and L2, then started to write the Architecture report.
+
+## 26/05/2026
+Working session with Fateme to continue the report and correct the last issues while proceeding.
+
+## 27/05/2026
+Working session with Fateme to continue the report and correct the last issues while proceeding.
+
+## 28/05/2026
+Working session with Fateme to finish the report and correct the last issues while proceeding.
+
+## 29/05/2026
+Read the Design Report done by Amirhossein and Alice.
+
+## 03/06/2026
+Read the Overview done by Sergio.
