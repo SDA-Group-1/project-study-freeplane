@@ -49,12 +49,6 @@ dependencies. Updated the design report with co-change
 tables and deeper explanations. Added all three scripts
 to the extra-material folder.
 
-## 21/05/2026
-
-Added a Mermaid dependency diagram to the design report
-to visually represent the code dependencies between
-the main Freeplane modules.
-
 ## 20/05/2026
 
 Identified two inconsistencies between code and knowledge
@@ -62,6 +56,13 @@ dependencies. Updated the design report with co-change
 tables and deeper explanations. Added all three scripts
 to the extra-material folder.
 
-22/05/2026
-Trimmed the Dependencies section to stay within the word limit.
-Replaced the Mermaid code block with a PNG diagram file.
+## 21/05/2026
+
+Added a Mermaid dependency diagram to the design report
+to visually represent the code dependencies between
+the main Freeplane modules.
+
+## 22/05/2026
+
+- Trimmed the Dependencies section to stay within the word limit.
+- Replaced the Mermaid code block with a PNG diagram file.
