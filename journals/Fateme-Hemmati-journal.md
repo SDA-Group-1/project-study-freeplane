@@ -45,3 +45,5 @@ Had another 5-hour meeting with Niccolò. Corrected and finalized the container 
 ## 28/05/2026
 Did the final corrections for all three diagram levels and completed the architecture section of the report document with Niccolò. Read the design section done by Amirhossein and Alice to better understand that part, identify possible conflicts, and make sure everything is coherent between the design and architecture sections.
 
+## 9/06/2026
+read overiew part done by Sergio to make sure everything is coherent in the whole project.
